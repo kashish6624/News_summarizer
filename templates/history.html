@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Summary History</title>
+</head>
+
+<body>
+
+<h1>Summary History</h1>
+
+<a href="/">⬅ Back</a>
+
+{% for article in articles %}
+<div style="margin:20px; padding:15px; border:1px solid gray">
+    <p><strong>URL:</strong> {{ article.url }}</p>
+    <p><strong>Date:</strong> {{ article.created_at }}</p>
+    <p>{{ article.summary }}</p>
+</div>
+{% endfor %}
+
+</body>
+</html>

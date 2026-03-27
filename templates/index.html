@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News Summarizer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <h1> AI News Summarizer</h1>
+
+    <a href="/history" class="history-link">View Previously summarized Articles</a>
+
+    <br>
+
+    <form method="POST" onsubmit="showLoader()">
+        <input type="text" name="url"
+            placeholder="Paste news article URL..."
+            required>
+
+        <button id="submit-btn" type="submit">
+            Summarize
+        </button>
+    </form>
+
+    <div id="loader" class="loader-container">
+        <div class="spinner"></div>
+        <p>Summarizing article... please wait ⏳</p>
+    </div>
+
+    {% if summary %}
+    <div class="result">
+        <h2>Summary</h2>
+        <p>{{ summary }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function showLoader() {
+    document.getElementById("loader").style.display = "block";
+
+    const btn = document.getElementById("submit-btn");
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+}
+</script>
+
+</body>
+</html>
