@@ -24,7 +24,7 @@ def index():
     if request.method == "POST":
         url = request.form["url"]
 
-        article_text = fetch_article_from_url(url)
+        article_text = fetch_article_from_url(url)[:2000]
 
         if article_text.strip():
             summary = summarize_text(article_text)
