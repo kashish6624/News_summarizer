@@ -1,30 +1,29 @@
 from transformers import pipeline
 
-class NewsSummarizer:
-    def __init__(self):
-        self.summarizer = pipeline(
+summarizer = None   # global model
+
+
+def get_model():
+    global summarizer
+
+    if summarizer is None:
+        summarizer = pipeline(
             "summarization",
-            model="sshleifer/distilbart-cnn-12-6"
+            model="sshleifer/distilbart-cnn-12-6",
+            device=-1   # CPU only
         )
-        
-    def chunk_text(self, text, max_chars=3000):
-        chunks = []
-        for i in range(0, len(text), max_chars):
-            chunks.append(text[i:i + max_chars])
-        return chunks
-    
-    def summarize(self, article_text):
-        chunks = self.chunk_text(article_text)
 
-        summaries = []
-        for chunk in chunks:
-            summary = self.summarizer(
-                chunk,
-                max_length=300,
-                min_length=150,
-                do_sample=False
-            )
-            summaries.append(summary[0]["summary_text"])
+    return summarizer
 
-        # Final combined summary
-        return " ".join(summaries)
+
+def summarize_text(article_text):
+    model = get_model()
+
+    result = model(
+        article_text[:1500],
+        max_length=120,
+        min_length=40,
+        do_sample=False
+    )
+
+    return result[0]["summary_text"]
