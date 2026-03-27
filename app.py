@@ -21,18 +21,24 @@ with app.app_context():
 def index():
     summary = ""
 
+    @app.route("/", methods=["GET", "POST"])
+def index():
+    summary = ""
+
     if request.method == "POST":
         url = request.form["url"]
 
-        article_text = fetch_article_from_url(url)[:2000]
+        article_text = fetch_article_from_url(url)
 
         if article_text.strip():
             summary = summarize_text(article_text)
 
-            # SAVE TO HISTORY
             record = ArticleHistory(url=url, summary=summary)
             db.session.add(record)
             db.session.commit()
+
+        else:
+            summary = "⚠️ Could not extract article. This website may block scraping."
 
     return render_template("index.html", summary=summary)
 
