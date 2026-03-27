@@ -4,7 +4,7 @@ class NewsSummarizer:
     def __init__(self):
         self.summarizer = pipeline(
             "summarization",
-            model="facebook/bart-large-cnn"
+            model="sshleifer/distilbart-cnn-12-6""
         )
         
     def chunk_text(self, text, max_chars=3000):
