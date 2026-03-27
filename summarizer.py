@@ -21,8 +21,8 @@ def summarize_text(article_text):
 
     result = model(
         article_text[:1500],
-        max_length=120,
-        min_length=40,
+        max_length=300,
+        min_length=150,
         do_sample=False
     )
 
