@@ -1,27 +1,22 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request
 from summarizer import summarize_text
 from fetcher import fetch_article_from_url
 from models import db, ArticleHistory
 import os
 
-
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///history.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/history.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-# Create DB automatically
+# Create DB
 with app.app_context():
     db.create_all()
 
 
 @app.route("/", methods=["GET", "POST"])
-def index():
-    summary = ""
-
-    @app.route("/", methods=["GET", "POST"])
 def index():
     summary = ""
 
@@ -36,14 +31,12 @@ def index():
             record = ArticleHistory(url=url, summary=summary)
             db.session.add(record)
             db.session.commit()
-
         else:
-            summary = "⚠️ Could not extract article. This website may block scraping."
+            summary = "⚠️ Could not extract article."
 
     return render_template("index.html", summary=summary)
 
 
-# HISTORY PAGE
 @app.route("/history")
 def history():
     articles = ArticleHistory.query.order_by(
@@ -51,3 +44,8 @@ def history():
     ).all()
 
     return render_template("history.html", articles=articles)
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
