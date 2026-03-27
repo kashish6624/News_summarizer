@@ -1,6 +1,9 @@
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 from transformers import pipeline
 
-summarizer = None   # global model
+summarizer = None
 
 
 def get_model():
@@ -10,7 +13,7 @@ def get_model():
         summarizer = pipeline(
             "summarization",
             model="sshleifer/distilbart-cnn-12-6",
-            device=-1   # CPU only
+            device=-1
         )
 
     return summarizer
